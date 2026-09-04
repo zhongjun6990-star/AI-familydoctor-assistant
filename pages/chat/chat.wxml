@@ -1,0 +1,89 @@
+<view class="page">
+
+  <!-- 侧边栏遮罩 -->
+  <view class="mask {{sidebarOpen ? 'show' : ''}}" bindtap="closeSidebar"></view>
+
+  <!-- 侧边栏抽屉 -->
+  <view class="sidebar {{sidebarOpen ? 'open' : ''}}">
+    <view class="sidebar-head">最近项目</view>
+    <scroll-view class="proj-list" scroll-y>
+      <view class="proj" wx:for="{{projects}}" wx:key="id" bindtap="openProject" data-index="{{index}}">
+        <view class="dot" style="background:{{item.color}}"></view>
+        <view class="proj-name">{{item.name}}</view>
+        <view class="proj-time">{{item.time}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 顶部导航 -->
+  <view class="navbar" style="padding-top:{{statusBarHeight}}px">
+    <view class="nav-btn" bindtap="toggleSidebar">
+      <view class="menu-icon">
+        <view class="bar"></view>
+        <view class="bar"></view>
+        <view class="bar"></view>
+      </view>
+    </view>
+    <view class="title">{{currentProjectName}}</view>
+    <view class="nav-btn" bindtap="newProject">
+      <view class="new-icon">+</view>
+    </view>
+  </view>
+
+  <!-- 聊天区 -->
+  <scroll-view class="chat" scroll-y scroll-into-view="{{scrollInto}}" scroll-with-animation>
+    <view class="msg-row" wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}">
+      <image wx:if="{{item.type === 'image'}}" class="msg-img" src="{{item.content}}" mode="widthFix"></image>
+      <view wx:else class="msg {{item.role}}">{{item.content}}</view>
+    </view>
+
+    <!-- 正在输入 -->
+    <view class="msg-row" wx:if="{{typing}}">
+      <view class="msg assistant typing">
+        <view class="t-dot"></view>
+        <view class="t-dot"></view>
+        <view class="t-dot"></view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 上传面板遮罩 -->
+  <view class="upload-mask {{uploadOpen ? 'show' : ''}}" bindtap="closeUpload"></view>
+
+  <!-- 上传面板 -->
+  <view class="upload-panel {{uploadOpen ? 'show' : ''}}">
+    <view class="up-grid">
+      <view class="up-item" bindtap="takePhoto">
+        <view class="up-icon" style="background:#378ADD">相</view>
+        <text class="up-label">相机</text>
+      </view>
+      <view class="up-item" bindtap="choosePhoto">
+        <view class="up-icon" style="background:#1D9E75">图</view>
+        <text class="up-label">照片</text>
+      </view>
+      <view class="up-item" bindtap="chooseFile">
+        <view class="up-icon" style="background:#D85A30">文</view>
+        <text class="up-label">文件</text>
+      </view>
+      <view class="up-item" bindtap="openPlugin">
+        <view class="up-icon" style="background:#7F77DD">插</view>
+        <text class="up-label">插件</text>
+      </view>
+    </view>
+    <view class="up-cancel" bindtap="closeUpload">取消</view>
+  </view>
+
+  <!-- 底部输入栏 -->
+  <view class="inputbar">
+    <view class="plus-btn" bindtap="toggleUpload">
+      <text class="plus-symbol">+</text>
+    </view>
+    <view class="inputwrap">
+      <input class="input" placeholder="输入消息…" value="{{input}}" bindinput="onInput" confirm-type="send" bindconfirm="sendMessage" />
+    </view>
+    <view class="send-btn {{input ? 'active' : ''}}" bindtap="sendMessage">
+      <text class="send-symbol">↑</text>
+    </view>
+  </view>
+
+</view>
